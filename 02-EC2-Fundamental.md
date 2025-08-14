@@ -73,3 +73,99 @@ This column shows how much network throughput (bandwidth) the instance can achie
 * This is the maximum throughput to Amazon Elastic Block Store (EBS) volumes.
 * Measured in megabits per second (Mbps), not megabytes — so divide by 8 for MB/s.
 * Determines how fast your instance can read/write to EBS.
+
+# Launch EC2 Instances
+
+1. go to EC2 Service
+2. go to menu instances and click launch instances
+3. naming the instance
+4. select base image as OS instance: Linux (Ubuntu, AWS Linux, RedHat, etc...), Windows, Mac OS
+5. select instance type: t3.micro, t3.small\
+    This is to determine size of memory, networking, or storage needs align with the on-demand price.
+6. create a new key pair using SSH to login to the instance.
+    * recommended to use .ppm format because .ppk only used for old windows (8, 7)
+7. set network setting by "Allow SSH traffic from" and choose dropdown "anywhere"
+8. also check "Allow HTTP traffic from the internet" so that our web can access from outside
+9. configure storage by choose the right storage for our app.
+
+<img src="img/02/configure-storage.png" width="500"/>
+
+> #### 1× 8 GiB gp3
+> 1× → You currently have one EBS volume attached.\
+> 8 GiB → The size of the disk (8 gibibytes). This will be your instance’s root disk (where the OS is installed).\
+> gp3 → The volume type: General Purpose SSD (gp3).
+>    * Balances price and performance for most workloads.
+>    * Allows configurable IOPS (input/output operations per second).
+ 
+> #### Root volume, 3000 IOPS, Not encrypted
+> * Root volume → This is where your EC2 instance’s operating system will live.
+> * 3000 IOPS → Performance setting: how many read/write operations per second it supports.
+> * Not encrypted → The disk data is stored without encryption at rest (you can choose encryption if you want).
+
+10. advance detail, we can put a script or command inside "User Data Script" input.
+11. review the summary in side of screen. then hit launch instance
+
+## About Instance Dashboard
+
+If user select one of created instances then detail information would be shown up.
+There would be:
+1. Instance ID
+2. Public IP Address
+3. Private IP Address -> only used from internal AWS infrastructure network
+4. etc...
+
+## EC2 Instance Type
+
+There are many instance we can choose to suite our app. Please see https://aws.amazon.com/ec2/instance-types/.
+On the page, AWS provide specific instance class, like, General Purpose, Compute Optimized, Memory Optimized, Accelerated Computing, and so on...
+
+Also, it has naming conventions:
+
+`m5.2xlarge`
+
+Where:
+* m : is the instance class. m mean instance class for General Purpose
+* 5 : the generation of the hardware. AWS will always improve it.
+* 2xlarge : the instance class size. the more memory, the more CPU, and more...
+
+## EC2 Instance Type class
+
+### 1. General Purpose
+
+Great for diversity of workloads such as web servers or code repositories.
+Balance between:
+* compute (the raw processing capability of the instance — basically, how much CPU power you get for running instructions.)
+* memory
+* networking
+
+### 2. Compute Optimized
+
+Great for compute intensive tasks that require high performance processors:
+* batch processing workloads
+* media transcoding
+* high performance web servers
+* high performance computing
+* scientific modeling & machine learning
+* dedicated gaming servers
+
+### 3. Memory Optimized
+
+Fast performance for workloads that process large data sets in memory (RAM)
+* High performance, relational/non-relational databases
+* distributed web scale cache stores
+* In-memory databases optimized for BI (business intelligence)
+* applications performing real-time processing of big unstructured data
+
+### 4. Storage optimized
+
+Great for storage-intensive tasks that require high, sequential read and 
+write access to large data sets on local storage.
+* High frequency online transaction processing (OLTP) systems
+* Relational & NoSQL databases
+* Cache for in-memory databases (for example, Redis)
+* Data warehousing applications
+* Distributed file systems
+
+# Security Group
+
+TODO...
