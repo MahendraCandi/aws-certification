@@ -166,6 +166,48 @@ write access to large data sets on local storage.
 * Data warehousing applications
 * Distributed file systems
 
-# Security Group
+# Security Groups
 
-TODO...
+Setting up a firewall network.
+
+* Security Groups are the fundamental of network security in AWS
+* Control how traffic allowed into or out of EC2 Instances
+* Security groups only contain **allow** rules
+* Security groups rules can reference by IP or by security group
+
+Security groups will regulate:
+1. Access to port
+2. Authorized IP ranges - IPv4 and IPv6
+3. Control of inbound network (from other to distance)
+4. Control of outbound network (from instance to other)
+
+Display of component security groups:
+
+<img src="img/02/security-groups.png" width="500"/>
+
+#### Good to know
+1. A security groups can be attached to multiple instances
+2. An instance can have multiple security groups
+3. Locked down to a region or VPC combination. means the scope is limit to region or VPC combination
+4. Live in outside the EC2. means act in the middle between outside and EC2. EC2 won't know if traffic is blocked
+5. Its good to maintain a separate security group for SSH access
+6. If our app is not accessible (timeout), then it is a security group issue
+7. If our app give "connection refused", then it is application error or it is not launch
+8. All inbound traffic is blocked by default
+9. All out bound traffic is authorized by default
+
+#### Whitelist inbound by security groups
+
+Instead of relying on IP address, we can whitelist an inbound traffic by using Security Groups.
+This approach can be achieved by defining the security groups name in an instance.
+
+![](img/02/referencing-other-security-groups.png)
+
+#### Classic ports
+ * 22 SSH (secure shell) to login in linux
+ * 21 FTP (File Transfer Protocol) to upload files into a file share
+ * 22 SFTP (Secure File Transfer Protocol) upload files using SSH
+ * 80 HTTP to access unsecure web
+ * 443 HTTPS to access secured web
+ * 3389 RDP (Remote Desktop Protocol) to log into windows instance
+
