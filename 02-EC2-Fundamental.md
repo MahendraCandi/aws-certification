@@ -211,3 +211,136 @@ This approach can be achieved by defining the security groups name in an instanc
  * 443 HTTPS to access secured web
  * 3389 RDP (Remote Desktop Protocol) to log into windows instance
 
+# SSH from local computer
+
+> required Access Key. See **Generate Access Key** in module 1
+
+1. AWS will create a default user to connect using SSH. It's called `ec2-user`
+2. Connect to SSH by using terminal or Command Prompt
+3. Should point provide the access key by using parameter `-i`
+4. The command will looks like, `ssh -i the-path-to-access-key ec2-user@public-ip-address`
+5. In Windows 11, there would be known issue with the permission of certificate, the file access should not have multiple owner.
+    Hopefully, run the command prompt as administrator could solve the permission issue. If not then surf on the internet :)
+6. If success, then terminal will look like:
+
+![](img/02/ssh-login-success.png)
+
+# SSH from console
+
+1. In EC2 service go to instances menu
+2. Then click on ID of which instance would you like to access
+3. In Connect info page, ensure that option EC2 instance connect is appear.
+4. Choose connect using public IP address in connection type
+5. Fill username with `ec2-user`, if not present
+6. Then hit connect
+
+# First thing first when connect to the Instance
+
+## Setup IAM inside instance
+
+> **AVOID USING `aws iam configure`, it will expose our credential.**\
+> Better using IAM Role.
+
+1. See module 1, "IAM Role" to recall how to create one
+2. Inside the Role, attach which permission the role could access. For instance, to read IAM the role should have permission "IAMReadOnlyAccess".
+3. Attach the Role to EC2 instance by click on "Actions" dropdown button and choose "Security"
+4. There would be sub-options "Modify IAM Role" appears, hit it
+5. Choose which IAM Role, and hit update button
+
+# EC2 Instance Purchasing Options
+
+### On-Demand Instances
+> Short workload, predictable pricing, pay by second
+
+* Pay for what you use:
+    * Linux or Windows - billing per second, after the first minute
+    * All other operating systems - billing per hour
+* Has the highest cost but no upfront payment
+* No long-term commitment
+
+* Recommended for short-term and un-interrupted workloads, where
+you can't predict how the application will behave
+
+### EC2 Reserved Instances (1 & 3 years)
+> Reserved instance - long workloads\ 
+> Convertible Reserved Instances - long workload with flexible instances
+
+* Up to 72% discount compared to On-demand
+* You reserve a specific instance attributes (Instance Type, Region, Tenancy, OS)
+* Reservation Period - 1 year (+discount) or 3 years (+++discount)
+* Payment Options - No Upfront (+), Partial Upfront (++), All Upfront (+++)
+* Reserved Instance's Scope - Regional or Zonal (reserve capacity in an AZ)
+* Recommended for steady-state usage applications (think database)
+* You can buy and sell in the Reserved Instance Marketplace
+
+* Convertible Reserved Instance
+    * Can change the EC2 instance type, instance family, OS, scope and tenancy
+    * Up to 66% discount
+
+Note: the % discounts could be different
+
+### Savings Plans (1 & 3 years)
+> Commitment to an amount of usage, long workload
+
+* Get a discount based on long-term usage (up to 72% - same as Rls)
+* Commit to a certain type of usage ($10/hour for I or 3 years)
+* Usage beyond EC2 Savings Plans is billed at the On-Demand price
+
+* Locked to a specific instance family & AWS region (e.g., M5 in us-east-I)
+* Flexible across:
+    * Instance Size (e.g., m5.xlarge, m5.2xlarge)
+    * OS (e.g., Linux, Windows)
+    * Tenancy (Host, Dedicated, Default)
+
+### Spot Instances 
+> Short workloads, cheap, can lose instances
+
+* Can get a discount of up to 90% compared to On-demand
+* Instances that you can "lose" at any point of time if your max price is less than the current spot price
+* The MOST cost-efficient instances in AWS
+
+* Useful for workloads that are resilient to failure
+    * Batch jobs
+    * Data analysis
+    * Image processing
+    * Any distributed workloads
+    * Workloads with a flexible start and end time
+
+* Not suitable for critical jobs or databases
+
+### Dedicated Hosts
+> Book entire physical server, control instance placement
+
+* A physical server with EC2 instance capacity fully dedicated to your use
+* Allows you address compliance requirements and use your existing server-bound software licenses (per-socket, per-core, pe-VM software licenses)
+* Purchasing Options:
+    * On-demand - pay per second for active Dedicated Host
+    * Reserved - I or 3 years (No Upfront, Partial Upfront, All Upfront)
+* The most expensive option
+
+* Useful for software that have complicated licensing model (BYOL - Bring Your Own License)
+* Or for companies that have strong regulatory or compliance needs
+
+### Dedicated Instance
+> No other customers will share user hardware
+
+* Instances run on hardware that's dedicated to you
+* May share hardware with other instances in same account
+* No control over instance placement (can move hardware after Stop / Start)
+
+![](img/02/dedicated-host-vs-instance.png)
+
+
+### Capacity Reservations
+> Reserve capacity in a specific AZ for any duration
+
+* Reserve On-Demand instances capacity in a specific AZ for any duration
+* You always have access to EC2 capacity when you need it
+* No time commitment (create/cancel anytime), no billing discounts
+* Combine with Regional Reserved Instances and Savings Plans to benefit from billing discounts
+* You're charged at On-Demand rate whether you run instances or not
+
+* Suitable for short-term, uninterrupted workloads that needs to be in a
+specific AZ
+
+
